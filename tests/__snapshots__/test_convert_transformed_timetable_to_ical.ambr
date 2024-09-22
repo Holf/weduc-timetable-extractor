@@ -1,0 +1,32 @@
+# serializer version: 1
+# name: test_convert_json_to_ical
+  '''
+  BEGIN:VCALENDAR
+  BEGIN:VEVENT
+  SUMMARY:English La - ENGLISH3 (10w/En1)
+  DTSTART:20240927T102000Z
+  DTEND:20240927T112000Z
+  UID:281475447549934
+  DESCRIPTION:\n        Room name: ENGLISH3\n        Class name: 10w/En1\n  
+         Subject name: English La\n        Teacher name: C Reynolds\n      
+  END:VEVENT
+  BEGIN:VEVENT
+  SUMMARY:Des.Tech - DT7 (10B/Dt1)
+  DTSTART:20240927T112000Z
+  DTEND:20240927T122000Z
+  UID:281475447549935
+  DESCRIPTION:\n        Room name: DT7\n        Class name: 10B/Dt1\n       
+    Subject name: Des.Tech\n        Teacher name: S Oti-Akenten\n      
+  END:VEVENT
+  BEGIN:VEVENT
+  SUMMARY:Maths - T1 (10w/Ma2)
+  DTSTART:20240927T130000Z
+  DTEND:20240927T140000Z
+  UID:281475447549936
+  DESCRIPTION:\n        Room name: T1\n        Class name: 10w/Ma2\n        
+   Subject name: Maths\n        Teacher name: V Tucker\n      
+  END:VEVENT
+  END:VCALENDAR
+  
+  '''
+# ---

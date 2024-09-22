@@ -1,0 +1,8 @@
+[weduc]
+username = your_weduc_username
+password = your_weduc_password
+school_id = the ID of the school to which the student belongs
+student_id = the ID of the student
+
+[google_calendar]
+calendar_to_update = Name of the calendar to update

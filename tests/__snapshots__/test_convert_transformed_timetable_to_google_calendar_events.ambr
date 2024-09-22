@@ -1,0 +1,59 @@
+# serializer version: 1
+# name: test_convert_transformed_timetable_to_google_calendar_events
+  list([
+    dict({
+      'description': '''
+        
+                Room name: ENGLISH3
+                Class name: 10w/En1
+                Subject name: English La
+                Teacher name: C Reynolds
+              
+      ''',
+      'end': dict({
+        'dateTime': '2024-09-27T11:20:00+00:00',
+      }),
+      'id': '281475447549934',
+      'start': dict({
+        'dateTime': '2024-09-27T10:20:00+00:00',
+      }),
+      'summary': 'English La - ENGLISH3 (10w/En1)',
+    }),
+    dict({
+      'description': '''
+        
+                Room name: DT7
+                Class name: 10B/Dt1
+                Subject name: Des.Tech
+                Teacher name: S Oti-Akenten
+              
+      ''',
+      'end': dict({
+        'dateTime': '2024-09-27T12:20:00+00:00',
+      }),
+      'id': '281475447549935',
+      'start': dict({
+        'dateTime': '2024-09-27T11:20:00+00:00',
+      }),
+      'summary': 'Des.Tech - DT7 (10B/Dt1)',
+    }),
+    dict({
+      'description': '''
+        
+                Room name: T1
+                Class name: 10w/Ma2
+                Subject name: Maths
+                Teacher name: V Tucker
+              
+      ''',
+      'end': dict({
+        'dateTime': '2024-09-27T14:00:00+00:00',
+      }),
+      'id': '281475447549936',
+      'start': dict({
+        'dateTime': '2024-09-27T13:00:00+00:00',
+      }),
+      'summary': 'Maths - T1 (10w/Ma2)',
+    }),
+  ])
+# ---
