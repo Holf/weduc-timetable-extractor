@@ -1,7 +1,6 @@
 import argparse
 
-from .get_config import get_config
-from .throw_error import throw_error
+from .get_config import get_config_option
 
 
 def get_command_line_args():
@@ -14,12 +13,9 @@ def get_command_line_args():
         help="Choose 'ical' or 'api'", dest="mode", required=True
     )
 
-    parser_ical = subparsers.add_parser(
+    subparsers.add_parser(
         "ical",
         help="Generate an iCalendar '.ics' file from the extracted Weduc timetable",
-    )
-    parser_ical.add_argument(
-        "output_path", help="The output path for the generated '.ics' file"
     )
 
     subparsers.add_parser(
@@ -28,12 +24,7 @@ def get_command_line_args():
 
     args = parser.parse_args()
 
-    if args.mode == "api":
-        config = get_config("google_calendar", "calendar_to_update")
-
-        if config == None:
-            throw_error(
-                "Error: mode of 'api' was specified but there is no 'google_calendar.calendar_to_update' present in config.ini"
-            )
+    if args.mode == "ical":
+        get_config_option("ical", "output_folder_path", throw_if_absent=True)
 
     return args

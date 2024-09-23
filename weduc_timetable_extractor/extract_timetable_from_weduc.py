@@ -1,50 +1,15 @@
-import sys
-
 from playwright.sync_api import Page
 
-from .get_config import get_config
 
-login_timeout = 5 * 60 * 1000  # 5 minutes
+def extract_timetable_from_weduc(page: Page, student_config):
 
-
-def check_config(key):
-    if not (value := get_config("weduc", key)):
-        sys.stderr.write(f"\nError: There is no 'weduc.{key}' present in config.ini")
-        sys.exit(2)
-    return value
-
-
-def login(page: Page):
-
-    if username := get_config("weduc", "username"):
-        username_input = page.get_by_label("Login or E-mail")
-        username_input.wait_for()
-        username_input.type(username)
-
-    if password := get_config("weduc", "password"):
-        password_input = page.get_by_label("Password")
-        password_input.wait_for()
-        password_input.type(password)
-
-    if username != "" and password != "":
-        login_button = page.get_by_role("button", name="Login")
-        login_button.click()
-
-
-def extract_timetable_from_weduc(page: Page):
-
-    school_id = check_config("school_id")
-    student_id = check_config("student_id")
-
-    login(page)
-
-    page.wait_for_function(
-        "localStorage.getItem('wfx_unq') !== null", timeout=login_timeout
+    section_name, school_id, student_id = (
+        student_config["section_name"],
+        student_config["school_id"],
+        student_config["student_id"],
     )
 
-    page.wait_for_function(
-        "localStorage.getItem('wfx_UUID') !== null", timeout=login_timeout
-    )
+    print(f"Extracting timetable for: '{section_name}' ...")
 
     response_data = page.evaluate(
         """

@@ -1,8 +1,17 @@
 [weduc]
 username = your_weduc_username
 password = your_weduc_password
-school_id = the ID of the school to which the student belongs
-student_id = the ID of the student
 
-[google_calendar]
-calendar_to_update = Name of the calendar to update
+[ical]
+output_folder_path = the folder where iCalendar files should be written out to
+
+[student_1]
+school_id = the Weduc ID of the school to which the student belongs
+student_id = the student's Weduc ID
+calendar_to_update = the name of the calendar, in Google, where Weduc events should be pushed to
+
+[student_2]
+... as above, but for another student
+
+[student_3]
+... etc

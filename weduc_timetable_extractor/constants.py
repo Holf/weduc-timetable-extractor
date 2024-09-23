@@ -1,0 +1,5 @@
+WEDUC_SECTION_NAME = "weduc"
+
+WEDUC_LOGIN_TIMEOUT = 5 * 60 * 1000  # Five minutes
+
+STUDENT_SECTION_NAME_PREFIX = "student_"

@@ -4,6 +4,8 @@ from datetime import datetime, timezone
 def filter_and_transform_timetable(timetable):
     today_utc = datetime.now(timezone.utc)
 
+    print("Transforming timetable and removing past events ...")
+
     return [
         {
             **event,
