@@ -1,6 +1,6 @@
 import argparse
 
-from .get_config import get_config_option
+from .config_management import get_config_option
 
 
 def get_command_line_args():

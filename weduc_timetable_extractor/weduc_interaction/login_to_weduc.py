@@ -1,9 +1,9 @@
 from playwright.sync_api import Page
 
-from .constants import WEDUC_LOGIN_TIMEOUT
+from ..constants import WEDUC_LOGIN_TIMEOUT
 
 
-def login(page: Page, weduc_credentials):
+def login_to_weduc(page: Page, weduc_credentials):
 
     print("Logging in to Weduc ...")
 

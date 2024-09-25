@@ -69,9 +69,11 @@ def get_student_configs():
 def get_student_config(section_name):
     return {
         "section_name": section_name,
-        "school_id": get_config_option(section_name, "school_id", throw_if_absent=True),
-        "student_id": get_config_option(
-            section_name, "student_id", throw_if_absent=True
+        "school_name": get_config_option(
+            section_name, "school_name", throw_if_absent=True
+        ),
+        "student_name": get_config_option(
+            section_name, "student_name", throw_if_absent=True
         ),
         "calendar_to_update": get_config_option(section_name, "calendar_to_update"),
     }

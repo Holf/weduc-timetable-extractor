@@ -1,11 +1,18 @@
 from playwright.sync_api import sync_playwright
 
-from .extract_timetable_from_weduc import extract_timetable_from_weduc
+from .config_management import get_student_configs, get_weduc_credentials
 from .filter_and_transform_timetable import filter_and_transform_timetable
 from .get_command_line_args import get_command_line_args
-from .get_config import get_student_configs, get_weduc_credentials
-from .login import login
 from .push_timetable_to_google_calendar import push_timetable_to_google_calendar
+from .weduc_interaction.extract_schools_data_from_weduc import (
+    extract_schools_data_from_weduc,
+)
+from .weduc_interaction.extract_students_data_from_weduc import (
+    extract_students_data_from_weduc,
+)
+from .weduc_interaction.extract_timetable_from_weduc import extract_timetable_from_weduc
+from .weduc_interaction.login_to_weduc import login_to_weduc
+from .weduc_interaction.set_active_school_in_weduc import set_active_school_in_weduc
 from .write_timetable_to_ics_file import write_timetable_to_ics_file
 
 
@@ -31,12 +38,24 @@ def main():
 
         page.goto("https://app.weduc.co.uk/")
 
-        login(page, weduc_credentials)
+        login_to_weduc(page, weduc_credentials)
+
+        schools = extract_schools_data_from_weduc(page)
 
         for student_config in student_configs:
-            student_config["timetable"] = filter_and_transform_timetable(
-                extract_timetable_from_weduc(page, student_config)
+
+            _log_student_info(student_config)
+
+            _add_school_id_to_student_config(student_config, schools)
+
+            set_active_school_in_weduc(page, student_config)
+
+            students = extract_students_data_from_weduc(
+                page, student_config["school_id"]
             )
+            _add_student_id_to_student_config(student_config, students)
+
+            _extract_timetable_and_add_to_student_config(page, student_config)
 
             match args.mode:
                 case "ical":
@@ -44,6 +63,47 @@ def main():
 
                 case "api":
                     push_timetable_to_google_calendar(student_config)
+
+
+def _log_student_info(student_config):
+    print(
+        f"""
+Processing timetable for student:
+    {student_config["student_name"]}
+at school:
+    {student_config["school_name"]}
+"""
+    )
+
+
+def _add_school_id_to_student_config(student_config, schools):
+
+    student_config["school_id"] = next(
+        (
+            school["school_id"]
+            for school in schools
+            if school["school_name"] == student_config["school_name"]
+        ),
+        None,
+    )
+
+
+def _add_student_id_to_student_config(student_config, students):
+
+    student_config["student_id"] = next(
+        (
+            student["id"]
+            for student in students
+            if student["name"] == student_config["student_name"]
+        ),
+        None,
+    )
+
+
+def _extract_timetable_and_add_to_student_config(page, student_config):
+    student_config["timetable"] = filter_and_transform_timetable(
+        extract_timetable_from_weduc(page, student_config)
+    )
 
 
 if __name__ == "__main__":

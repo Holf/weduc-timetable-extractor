@@ -23,11 +23,14 @@ def push_timetable_to_google_calendar(student_config):
         student_config["calendar_to_update"],
     )
 
-    print(f"Pushing events to Google Calendar '{calendar_name}' via API")
-
-    print("Converting timetable to Google Calendar events ...")
     google_calendar_events = convert_transformed_timetable_to_google_calendar_events(
         timetable
+    )
+
+    print(f'Pushing events to Google Calendar "{calendar_name}" ... ')
+    print(
+        """I: signifies an inserted event
+U: signifies an updated event"""
     )
 
     service = get_google_calendar_service()
@@ -35,30 +38,25 @@ def push_timetable_to_google_calendar(student_config):
     try:
         calendar_id = get_google_calendar_id(service, calendar_name)
 
-        # Prints the start and name of the next 10 events
         for event in google_calendar_events:
             event_id = event["id"]
 
-            print(f"Processing event with id: {event_id}")
-
             if get_event_exists(service, calendar_id, event_id):
-                print(f"    Updating existing event ... ", end="")
 
                 service.events().update(
                     calendarId=calendar_id, eventId=event_id, body=event
                 ).execute()
 
-                print("event updated")
+                print("U", end="", flush=True)
 
             else:
-                print("    Inserting new event ... ", end="")
 
                 service.events().insert(calendarId=calendar_id, body=event).execute()
 
-                print("event inserted")
+                print("I", end="", flush=True)
 
         print(
-            f"Pushed a total of {len(google_calendar_events)} events to Google Calender"
+            f"\nPushed a total of {len(google_calendar_events)} events to Google Calender"
         )
         print()
 
