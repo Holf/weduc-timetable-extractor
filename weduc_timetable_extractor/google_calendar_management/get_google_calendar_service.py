@@ -20,7 +20,7 @@ def get_google_calendar_service():
 def get_credentials():
     creds = None
 
-    project_root = Path(__file__).resolve().parent.parent
+    project_root = Path(__file__).resolve().parent.parent.parent
     token_file_path = project_root / "token.json"
     credentials_file_path = project_root / "credentials.json"
 

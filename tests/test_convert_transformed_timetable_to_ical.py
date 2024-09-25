@@ -1,8 +1,6 @@
-import json
-
 from freezegun import freeze_time
 
-from weduc_timetable_extractor.convert_transformed_timetable_to_ical import (
+from weduc_timetable_extractor.icalendar_management import (
     convert_transformed_timetable_to_ical,
 )
 

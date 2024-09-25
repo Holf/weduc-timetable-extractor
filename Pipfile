@@ -4,24 +4,23 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-pytest-html = "*"
 icalendar = "*"
-freezegun = "*"
 playwright = "*"
 google-api-python-client = "*"
 google-auth-httplib2 = "*"
 google-auth-oauthlib = "*"
+
+[dev-packages]
+freezegun = "*"
 isort = "*"
 syrupy = "*"
 pyinstaller = "*"
-
-[dev-packages]
 
 [requires]
 python_version = "3.12"
 python_full_version = "3.12.6"
 
 [scripts]
-start-api = "python -m weduc_timetable_extractor api"
-start-ical = "python -m weduc_timetable_extractor ical"
-debug = "env PWDEBUG=1 python -m weduc_timetable_extractor api"
+start-api = "sh -c 'python -m weduc_timetable_extractor api'"
+start-ical = "sh -c 'python -m weduc_timetable_extractor ical'"
+test = "pytest"

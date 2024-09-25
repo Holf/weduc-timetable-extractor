@@ -1,8 +1,6 @@
 import json
 
-from weduc_timetable_extractor.filter_and_transform_timetable import (
-    filter_and_transform_timetable,
-)
+from weduc_timetable_extractor.weduc_interaction import filter_and_transform_timetable
 
 
 def test_filter_and_transform_timetable(snapshot):

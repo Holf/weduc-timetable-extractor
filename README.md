@@ -4,21 +4,54 @@ A utility that extracts the lesson timetable from [Weduc](https://www.reachmorep
 
 There is also an option to output iCalendar files, instead.
 
-## Why?
+## Setup
 
-Viewing a timetable in Weduc requires you to log on and then carry out a few navigation steps to get to the correct screen.
+> **weduc-timetable-extractor** has been tested on Ubuntu running on Windows Subsystem for Linux 2 (WSL2). It _should_ work on other version of Linux, too, or even MacOS and Windows ... but this hasn't been tested.
 
-Viewing events in Google Calendar (or the calendaring system of your choice) is usually just a matter of getting your phone out of your pocket and opening the calendar app.
+The following setup steps should be carried out:
 
-I wrote this because it makes it quicker and easier to provide an answer when my kids say "Dad, what lessons do I have today?"
+### Install Python
 
-### A chance to play with Python
+**weduc-timetable-extractor** was written to work with Python `3.12.6`, so this is the ideal version to install.
 
-I wanted a project with a little bit of depth to help me learn some Python.
+It may well work with other `3.x` versions of Python (including those installed by default on Linux) but this is untested.
 
-I am a fairly seasoned developer in other languages but am relatively new to Python. I have tried to be [pythonic](https://en.wikipedia.org/wiki/Zen_of_Python), where I can, but there will undoubtedly be areas in this project where I have failed.
+### Install `pipenv`
 
-I have learnt a lot doing this, though, and really enjoyed it. I am starting to get what all the fuss is about with Python.
+**[pipenv](https://pipenv.pypa.io/en/latest/)** manages the project environment and installation of dependent packages.
+
+See the `pipenv` documentation for further details.
+
+### Install dependencies
+
+Once `pipenv` is installed, run the following commands to install the necessary dependencies:
+
+```sh
+pipenv shell
+pipenv install
+```
+
+### Install Chromium browser
+
+**weduc-timetable-extractor** relies on the Playwright end-to-end testing framework to drive a Chromium browser instance that interacts with the Weduc site.
+
+Chromium must, therefore, be installed.
+
+On Ubuntu, this can be done with the command:
+
+```sh
+sudo apt-get install chromium-browser
+```
+
+> _**weduc-timetable-extractor** expects to find Chromium in the default location for Ubuntu Linux, this being `/usr/bin/google-chrome`._
+>
+> _This path can be overridden using the `weduc.chromium_path` entry in `config.ini` (see below)._
+
+### Create `config.ini`
+
+This can be done by copying `config.ini.template` to `config.ini` and then populating it as described in the inline comments.
+
+See below for further detail on `config.ini`.
 
 ## How it works
 
@@ -33,8 +66,6 @@ The timetable data is then either:
 
 **weduc-timetable-extractor** can extract more than one student timetable and push data to separate Google Calendars or iCalendar files. This is useful if you have more than one student in the family.
 
-## Requirements
-
 ## Modes
 
 There are two modes of operation:
@@ -47,6 +78,8 @@ There are two modes of operation:
 ### Requirements for running in API mode
 
 API mode requires you to have set up access to the Google Calendar API.
+
+_Setting up Google Calendar API access is a little more involved, which is why the `iCalendar` mode is also provided for importing events to Google Calendar via an`.ics` file upload, instead._
 
 To do this, complete the three tasks described [here](https://developers.google.com/calendar/api/quickstart/python#set-up-environment). You only need to complete the tasks in the _'Set up your environment'_ section.
 
@@ -94,3 +127,19 @@ There should be one or more of these sections present. Each section name must be
 **Be wary of accidentally committing security-sensitive credentials** that might be present in `config.ini`.
 
 _(The `.gitingore` file should prevent this but it is worth reiterating, nevertheless.)_
+
+## Why was this written?
+
+Viewing a timetable in Weduc requires you to log on and then carry out a few navigation steps to get to the correct screen.
+
+Viewing events in Google Calendar (or the calendaring system of your choice) is usually just a matter of getting your phone out of your pocket and opening the calendar app.
+
+I wrote this because it makes it quicker and easier to provide an answer when my kids say "Dad, what lessons do I have today?"
+
+### A chance to play with Python
+
+I wanted a project with a little bit of depth to help me learn some Python.
+
+I am a fairly seasoned developer in other languages but am relatively new to Python. I have tried to be [pythonic](https://en.wikipedia.org/wiki/Zen_of_Python), where I can, but there will undoubtedly be areas in this project where I have failed.
+
+I have learnt a lot doing this, though, and really enjoyed it. I am starting to get what all the fuss is about with Python.

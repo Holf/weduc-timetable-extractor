@@ -2,7 +2,7 @@ import json
 
 from freezegun import freeze_time
 
-from weduc_timetable_extractor.convert_transformed_timetable_to_google_calendar_events import (
+from weduc_timetable_extractor.google_calendar_management import (
     convert_transformed_timetable_to_google_calendar_events,
 )
 
