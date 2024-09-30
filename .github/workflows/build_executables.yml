@@ -4,9 +4,9 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -15,14 +15,19 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
 
+    outputs:
+      release_upload_url: ${{ steps.create_release.outputs.upload_url }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for tagging
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12" # Your Python version
+          python-version: "3.12"
 
       - name: Install pipenv
         run: pip install pipenv
@@ -30,34 +35,75 @@ jobs:
       - name: Install dependencies
         run: pipenv install --dev
 
-      - name: Install PyInstaller
-        run: pipenv run pip install pyinstaller
-
-      - name: Build executable for ${{ matrix.os }}
+      - name: Build executable
         shell: bash
         run: |
-          if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
-            pipenv run pyinstaller --onefile --name weduc_timetable_extractor_windows weduc_timetable_extractor/__main__.py
-          elif [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
-            pipenv run pyinstaller --onefile --name weduc_timetable_extractor_linux weduc_timetable_extractor/__main__.py
-          elif [[ "${{ matrix.os }}" == "macos-latest" ]]; then
-            pipenv run pyinstaller --onefile --name weduc_timetable_extractor_macos weduc_timetable_extractor/__main__.py
-          fi
+          pipenv run pyinstaller --onefile --name weduc_timetable_extractor weduc_timetable_extractor/__main__.py
 
-        # Step 5: Create a release using the GitHub CLI (gh)
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: weduc_timetable_extractor-${{ matrix.os }}
+          path: dist/*
+
+      - name: Configure Git
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Generate version tag
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        id: vars
+        run: |
+          DATE=$(date -u +'%Y%m%d%H%M%S')
+          echo "DATE=$DATE" >> $GITHUB_ENV
+          echo "DATE=$DATE" >> $GITHUB_OUTPUT
+
+      - name: Authenticate for tag push
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        run: |
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+
+      - name: Create and push tag
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        run: |
+          git tag v$DATE
+          git push origin v$DATE
+
       - name: Create GitHub Release
-        shell: bash
-        run: |
-          gh release create ${{ github.ref }} \
-          ./dist/weduc_timetable_extractor* \
-          --title "Release ${{ github.ref }}" \
-          --notes "Automatically generated release for ${{ github.ref }}"
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: v${{ steps.vars.outputs.DATE }}
+          release_name: Release v${{ steps.vars.outputs.DATE }}
         env:
-          GITHUB_TOKEN: ${{ secrets.CREATE_RELEASE }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Step 6: Upload the generated assets (if there are multiple, include them all)
-      - name: Upload release assets
-        run: |
-          gh release upload ${{ github.ref }} ./dist/weduc_timetable_extractor*
+  upload:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: artifacts
+
+      - name: Get Release Upload URL
+        run: echo "RELEASE_UPLOAD_URL=${{ needs.build.outputs.release_upload_url }}" >> $GITHUB_ENV
+
+      - name: Upload Release Assets
         env:
-          GITHUB_TOKEN: ${{ secrets.CREATE_RELEASE }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          for filepath in artifacts/**/*; do
+            filename=$(basename $filepath)
+            echo "Uploading $filename..."
+            curl \
+              -X POST \
+              -H "Authorization: token $GITHUB_TOKEN" \
+              -H "Content-Type: application/octet-stream" \
+              --data-binary @"$filepath" \
+              "${RELEASE_UPLOAD_URL}?name=$filename"
+          done
