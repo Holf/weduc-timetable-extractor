@@ -12,7 +12,13 @@ def get_config():
     global config
 
     if config == None:
-        project_root = Path(__file__).resolve().parent.parent
+        if getattr(sys, "frozen", False):
+            # We are running in a bundle (PyInstaller)
+            project_root = Path(sys.executable).resolve().parent
+        else:
+            # We are running in a normal Python environment
+            project_root = Path(__file__).resolve().parent.parent
+
         config_file_path = project_root / "config.ini"
 
         config = configparser.ConfigParser()
