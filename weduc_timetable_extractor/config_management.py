@@ -51,6 +51,10 @@ def get_weduc_credentials():
     return credentials
 
 
+def get_chromium_path():
+    return get_config_option(WEDUC_SECTION_NAME, "chromium_path")
+
+
 def get_student_configs():
     section_names = get_config().sections()
     student_section_names = [

@@ -2,6 +2,7 @@ from playwright.sync_api import sync_playwright
 
 from weduc_timetable_extractor import get_command_line_args
 from weduc_timetable_extractor.config_management import (
+    get_chromium_path,
     get_student_configs,
     get_weduc_credentials,
 )
@@ -39,7 +40,7 @@ def main():
 
         print("Launching browser ...")
 
-        chromium_path = "/usr/bin/google-chrome"
+        chromium_path = get_chromium_path() or "/usr/bin/google-chrome"
         browser = p.chromium.launch(
             executable_path=chromium_path, headless=use_headless
         )
