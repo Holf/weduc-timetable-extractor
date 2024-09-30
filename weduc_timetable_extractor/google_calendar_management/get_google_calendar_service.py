@@ -1,4 +1,5 @@
 import os
+import sys
 from pathlib import Path
 
 from google.auth.transport.requests import Request
@@ -20,7 +21,13 @@ def get_google_calendar_service():
 def get_credentials():
     creds = None
 
-    project_root = Path(__file__).resolve().parent.parent.parent
+    if getattr(sys, "frozen", False):
+        # We are running in a bundle (PyInstaller)
+        project_root = Path(sys.executable).resolve().parent
+    else:
+        # We are running in a normal Python environment
+        project_root = Path(__file__).resolve().parent.parent.parent
+
     token_file_path = project_root / "token.json"
     credentials_file_path = project_root / "credentials.json"
 
