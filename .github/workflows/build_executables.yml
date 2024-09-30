@@ -53,11 +53,11 @@ jobs:
           --title "Release ${{ github.ref }}" \
           --notes "Automatically generated release for ${{ github.ref }}"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.CREATE_RELEASE }}
 
       # Step 6: Upload the generated assets (if there are multiple, include them all)
       - name: Upload release assets
         run: |
           gh release upload ${{ github.ref }} ./dist/weduc_timetable_extractor*
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.CREATE_RELEASE }}
