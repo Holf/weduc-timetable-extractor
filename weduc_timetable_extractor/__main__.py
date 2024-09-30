@@ -29,8 +29,6 @@ def main():
 
     print(f"Found {len(student_configs)} student config(s)")
 
-    ensure_playwright_browsers_installed()
-
     with sync_playwright() as p:
         print(
             "All login credentials are present in config, so using a headless browser to extract data from Weduc."
@@ -115,18 +113,6 @@ def _extract_timetable_and_add_to_student_config(page, student_config):
     student_config["timetable"] = filter_and_transform_timetable(
         extract_timetable_from_weduc(page, student_config)
     )
-
-
-import subprocess
-import sys
-
-
-def ensure_playwright_browsers_installed():
-    # Install the browsers
-    subprocess.run([sys.executable, "-m", "playwright", "install"], check=True)
-
-
-# Call this function at the start of your main script
 
 
 if __name__ == "__main__":
