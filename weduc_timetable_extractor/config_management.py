@@ -1,4 +1,5 @@
 import configparser
+import platform
 import sys
 from pathlib import Path
 
@@ -32,14 +33,10 @@ def get_config_option(section, option, throw_if_absent=False):
 
     if not config.has_option(section, option):
         if throw_if_absent:
-            sys.stderr.write(
-                f"\nError: There is no '{section}.{option}' present in config.ini"
-            )
-            sys.exit(2)
-        else:
-            return None
+            sys.exit(f"\nError: There is no '{section}.{option}' present in config.ini")
+        return None
 
-    return config.get(section, option)
+    return config.get(section, option).strip() or None
 
 
 def get_weduc_credentials():
@@ -58,7 +55,18 @@ def get_weduc_credentials():
 
 
 def get_chromium_path():
-    return get_config_option(WEDUC_SECTION_NAME, "chromium_path")
+    chromium_path = get_config_option(WEDUC_SECTION_NAME, "chromium_path")
+
+    if chromium_path != None:
+        return chromium_path
+
+    os_map = {
+        "Windows": r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
+        "Linux": "/usr/bin/google-chrome",
+        "Darwin": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    }
+
+    return os_map.get(platform.system())
 
 
 def get_student_configs():

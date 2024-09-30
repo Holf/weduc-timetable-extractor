@@ -38,7 +38,8 @@ def main():
 
         print("Launching browser ...")
 
-        chromium_path = get_chromium_path() or "/usr/bin/google-chrome"
+        chromium_path = get_chromium_path()
+        print("path", chromium_path)
         browser = p.chromium.launch(
             executable_path=chromium_path, headless=use_headless
         )
