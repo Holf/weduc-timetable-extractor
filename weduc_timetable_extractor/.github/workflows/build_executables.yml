@@ -1,0 +1,52 @@
+name: Build Executables
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12" # Your Python version
+
+      - name: Install pipenv
+        run: pip install pipenv
+
+      - name: Install dependencies
+        run: pipenv install --dev
+
+      - name: Install PyInstaller
+        run: pipenv run pip install pyinstaller
+
+      - name: Build executable for ${{ matrix.os }}
+        run: |
+          if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
+            pipenv run pyinstaller --onefile --name weduc_timetable_extractor_windows weduc_timetable_extractor/__main__.py
+          elif [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
+            pipenv run pyinstaller --onefile --name weduc_timetable_extractor_linux weduc_timetable_extractor/__main__.py
+          elif [[ "${{ matrix.os }}" == "macos-latest" ]]; then
+            pipenv run pyinstaller --onefile --name weduc_timetable_extractor_macos weduc_timetable_extractor/__main__.py
+          fi
+
+      - name: Upload executable as artifact
+        if: success()
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.os }}-executable
+          path: |
+            dist/weduc_timetable_extractor*
