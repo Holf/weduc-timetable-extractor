@@ -11,7 +11,7 @@ from weduc_timetable_extractor.google_calendar_management import (
 from weduc_timetable_extractor.icalendar_management import write_timetable_to_ics_file
 from weduc_timetable_extractor.weduc_interaction import (
     extract_schools_data_from_weduc,
-    extract_student_timetable_from_weduc,
+    extract_timetable_from_weduc_and_add_to_student_config,
     launch_browser_and_log_in,
 )
 
@@ -38,7 +38,9 @@ def main():
 
         for student_config in student_configs:
             add_summary_info_to_student_config(student_config)
-            extract_student_timetable_from_weduc(page, schools, student_config)
+            extract_timetable_from_weduc_and_add_to_student_config(
+                page, schools, student_config
+            )
 
     for student_config in student_configs:
 

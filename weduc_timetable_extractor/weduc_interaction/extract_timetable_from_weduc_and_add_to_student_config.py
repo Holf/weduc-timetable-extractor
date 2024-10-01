@@ -4,7 +4,9 @@ from .filter_and_transform_timetable import filter_and_transform_timetable
 from .set_active_school_in_weduc import set_active_school_in_weduc
 
 
-def extract_student_timetable_from_weduc(page, schools, student_config):
+def extract_timetable_from_weduc_and_add_to_student_config(
+    page, schools, student_config
+):
     print("\nExtracting timetable for student:")
     print(student_config["info_summary"])
 
