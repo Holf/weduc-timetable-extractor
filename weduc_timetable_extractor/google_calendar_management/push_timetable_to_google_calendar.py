@@ -7,16 +7,9 @@ from .get_google_calendar_id import get_google_calendar_id
 from .get_google_calendar_service import get_google_calendar_service
 
 
-def get_event_exists(service, calendar_id, event_id):
-    try:
-        event = service.events().get(calendarId=calendar_id, eventId=event_id).execute()
-
-        return event is not None
-    except:
-        return None
-
-
 def push_timetable_to_google_calendar(student_config):
+    print("\nPushing timetable events to Google Calendar for student:")
+    print(student_config["info_summary"])
 
     timetable, calendar_name = (
         student_config["timetable"],
@@ -62,3 +55,12 @@ U: signifies an updated event"""
 
     except HttpError as error:
         print(f"An error occurred: {error}")
+
+
+def get_event_exists(service, calendar_id, event_id):
+    try:
+        event = service.events().get(calendarId=calendar_id, eventId=event_id).execute()
+
+        return event is not None
+    except:
+        return None

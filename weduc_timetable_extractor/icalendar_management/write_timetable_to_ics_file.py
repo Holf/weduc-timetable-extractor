@@ -1,11 +1,18 @@
 from pathlib import Path
 
+from weduc_timetable_extractor.config_management import get_ics_folder_path
+
 from .convert_transformed_timetable_to_ical import convert_transformed_timetable_to_ical
 
 
-def write_timetable_to_ics_file(output_folder_path, student_config):
+def write_timetable_to_ics_file(student_config):
 
-    output_folder = Path(output_folder_path)
+    print("\nWriting out iCalendar file for student:")
+    print(student_config["info_summary"])
+
+    ics_folder_path = get_ics_folder_path()
+
+    output_folder = Path(ics_folder_path)
     output_folder.mkdir(parents=True, exist_ok=True)
 
     file_name = student_config["section_name"]

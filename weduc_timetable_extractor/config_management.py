@@ -32,16 +32,20 @@ def get_config():
 def get_config_option(section, option, throw_if_absent=False):
     config = get_config()
 
+    # Check if the option exists
     if not config.has_option(section, option):
-        if throw_if_absent:
-            sys.exit(f"\nError: There is no '{section}.{option}' present in config.ini")
-        return None
+        value = None
+    else:
+        value = config.get(section, option).strip() or None
 
-    return config.get(section, option).strip() or None
+    # Handle the absence of value if throw_if_absent is True
+    if value is None and throw_if_absent:
+        sys.exit(f"\nError: There is no '{section}.{option}' present in config.ini")
+
+    return value
 
 
 def get_weduc_credentials():
-
     username, password = get_config_option(
         WEDUC_SECTION_NAME, "username"
     ), get_config_option(WEDUC_SECTION_NAME, "password")
@@ -53,6 +57,10 @@ def get_weduc_credentials():
     }
 
     return credentials
+
+
+def get_ics_folder_path(throw_if_absent=False):
+    return get_config_option("ical", "output_folder_path", throw_if_absent)
 
 
 def get_chromium_path():
@@ -94,7 +102,18 @@ def get_student_configs():
         get_student_config(section_name) for section_name in student_section_names
     ]
 
+    validate_at_least_one_student_config(student_configs)
+
     return student_configs
+
+
+def validate_at_least_one_student_config(student_configs):
+    student_config_count = len(student_configs)
+
+    if student_config_count > 0:
+        return student_config_count
+
+    sys.exit("Error: there are no student configs in config.ini")
 
 
 def get_student_config(section_name):

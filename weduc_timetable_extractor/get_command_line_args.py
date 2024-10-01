@@ -1,6 +1,6 @@
 import argparse
 
-from .config_management import get_config_option
+from .config_management import get_ics_folder_path
 
 
 def get_command_line_args():
@@ -25,6 +25,7 @@ def get_command_line_args():
     args = parser.parse_args()
 
     if args.mode == "ical":
-        get_config_option("ical", "output_folder_path", throw_if_absent=True)
+        print("validaty")
+        get_ics_folder_path(throw_if_absent=True)
 
     return args

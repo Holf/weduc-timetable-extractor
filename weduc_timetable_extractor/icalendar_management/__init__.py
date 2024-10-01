@@ -1,2 +1,1 @@
-from .convert_transformed_timetable_to_ical import convert_transformed_timetable_to_ical
 from .write_timetable_to_ics_file import write_timetable_to_ics_file

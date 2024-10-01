@@ -1,9 +1,8 @@
 from playwright.sync_api import Page
 
 
-def extract_students_data_from_weduc(page: Page, school_id):
+def extract_students_data_from_weduc(page: Page):
 
-    # print(f"Desired school id: {school_id}")
     print("Extracting student ID info from Weduc ...")
 
     weduc_config = get_weduc_config(page)

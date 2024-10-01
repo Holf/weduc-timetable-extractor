@@ -35,6 +35,7 @@ def get_credentials():
     # Check if token.json exists, which stores the user's access and refresh tokens.
     if os.path.exists(token_file_path):
         creds = Credentials.from_authorized_user_file(token_file_path, SCOPES)
+
     # If there are no valid credentials, log the user in.
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
@@ -44,9 +45,11 @@ def get_credentials():
                 credentials_file_path, SCOPES
             )
             creds = flow.run_local_server(port=0)
+
         # Save the credentials for future use.
         with open(token_file_path, "w") as token:
             token.write(creds.to_json())
+
     return creds
 
 
