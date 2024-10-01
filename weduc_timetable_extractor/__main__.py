@@ -1,7 +1,7 @@
 from playwright.sync_api import sync_playwright
 
-from weduc_timetable_extractor import get_command_line_args
-from weduc_timetable_extractor.config_management import (
+from weduc_timetable_extractor import _get_command_line_args
+from weduc_timetable_extractor._config_management import (
     get_student_configs,
     get_weduc_credentials,
 )
@@ -17,7 +17,7 @@ from weduc_timetable_extractor.weduc_interaction import (
 
 
 def main():
-    args = get_command_line_args()
+    args = _get_command_line_args()
     weduc_credentials = get_weduc_credentials()
     use_headless = weduc_credentials["credentials_present"]
 

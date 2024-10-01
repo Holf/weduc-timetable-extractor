@@ -1,7 +1,7 @@
-from .extract_students_data_from_weduc import extract_students_data_from_weduc
-from .extract_timetable_from_weduc import extract_timetable_from_weduc
-from .filter_and_transform_timetable import filter_and_transform_timetable
-from .set_active_school_in_weduc import set_active_school_in_weduc
+from ._extract_students_data_from_weduc import _extract_students_data_from_weduc
+from ._extract_timetable_from_weduc import _extract_timetable_from_weduc
+from ._filter_and_transform_timetable import _filter_and_transform_timetable
+from ._set_active_school_in_weduc import _set_active_school_in_weduc
 
 
 def extract_timetable_from_weduc_and_add_to_student_config(
@@ -11,9 +11,9 @@ def extract_timetable_from_weduc_and_add_to_student_config(
     print(student_config["info_summary"])
 
     _add_school_id_to_student_config(student_config, schools)
-    set_active_school_in_weduc(page, student_config)
+    _set_active_school_in_weduc(page, student_config)
 
-    students = extract_students_data_from_weduc(page)
+    students = _extract_students_data_from_weduc(page)
     _add_student_id_to_student_config(student_config, students)
 
     _extract_timetable_and_add_to_student_config(page, student_config)
@@ -44,6 +44,6 @@ def _add_student_id_to_student_config(student_config, students):
 
 
 def _extract_timetable_and_add_to_student_config(page, student_config):
-    student_config["timetable"] = filter_and_transform_timetable(
-        extract_timetable_from_weduc(page, student_config)
+    student_config["timetable"] = _filter_and_transform_timetable(
+        _extract_timetable_from_weduc(page, student_config)
     )

@@ -1,8 +1,10 @@
 from pathlib import Path
 
-from weduc_timetable_extractor.config_management import get_ics_folder_path
+from weduc_timetable_extractor._config_management import get_ics_folder_path
 
-from .convert_transformed_timetable_to_ical import convert_transformed_timetable_to_ical
+from ._convert_transformed_timetable_to_ical import (
+    _convert_transformed_timetable_to_ical,
+)
 
 
 def write_timetable_to_ics_file(student_config):
@@ -20,7 +22,7 @@ def write_timetable_to_ics_file(student_config):
 
     print(f"Writing events as iCalendar format to file: {file_path}")
 
-    ical_content = convert_transformed_timetable_to_ical(student_config["timetable"])
+    ical_content = _convert_transformed_timetable_to_ical(student_config["timetable"])
     print("Events converted to iCalendar ...")
 
     with open(file_path, "w") as file:

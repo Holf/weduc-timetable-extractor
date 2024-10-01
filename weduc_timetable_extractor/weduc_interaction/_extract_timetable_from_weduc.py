@@ -1,7 +1,7 @@
 from playwright.sync_api import Page
 
 
-def extract_timetable_from_weduc(page: Page, student_config):
+def _extract_timetable_from_weduc(page: Page, student_config):
 
     student_id = student_config["student_id"]
 

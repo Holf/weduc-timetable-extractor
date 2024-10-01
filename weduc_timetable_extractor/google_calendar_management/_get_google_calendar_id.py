@@ -3,7 +3,7 @@ import sys
 from googleapiclient.errors import HttpError
 
 
-def get_google_calendar_id(service, calendar_name):
+def _get_google_calendar_id(service, calendar_name):
 
     try:
 

@@ -3,7 +3,7 @@ import platform
 import sys
 from pathlib import Path
 
-from .constants import STUDENT_SECTION_NAME_PREFIX, WEDUC_SECTION_NAME
+from ._constants import STUDENT_SECTION_NAME_PREFIX, WEDUC_SECTION_NAME
 
 config = None
 

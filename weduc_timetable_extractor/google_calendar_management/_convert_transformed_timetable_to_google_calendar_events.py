@@ -1,4 +1,4 @@
-def convert_transformed_timetable_to_google_calendar_events(transformed_timetable):
+def _convert_transformed_timetable_to_google_calendar_events(transformed_timetable):
     print("Converting timetable to Google Calendar events ...")
 
     google_calendar_events = []

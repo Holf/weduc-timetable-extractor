@@ -1,9 +1,9 @@
-from weduc_timetable_extractor.config_management import (
+from weduc_timetable_extractor._config_management import (
     get_chromium_path,
     validate_chromium_path,
 )
 
-from .login_to_weduc import login_to_weduc
+from ._login_to_weduc import _login_to_weduc
 
 
 def launch_browser_and_log_in(weduc_credentials, use_headless, p):
@@ -17,6 +17,6 @@ def launch_browser_and_log_in(weduc_credentials, use_headless, p):
     page = browser.new_page()
 
     page.goto("https://app.weduc.co.uk/")
-    login_to_weduc(page, weduc_credentials)
+    _login_to_weduc(page, weduc_credentials)
 
     return page

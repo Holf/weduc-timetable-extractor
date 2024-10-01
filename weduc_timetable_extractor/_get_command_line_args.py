@@ -1,9 +1,9 @@
 import argparse
 
-from .config_management import get_ics_folder_path
+from ._config_management import get_ics_folder_path
 
 
-def get_command_line_args():
+def _get_command_line_args():
     parser = argparse.ArgumentParser(
         prog="Weduc Timetable Extractor",
         description="Extracts timetable information from Weduc and either: exports it as an iCalendar file; or, uses Google Calendar API to push it to a Google Calendar",

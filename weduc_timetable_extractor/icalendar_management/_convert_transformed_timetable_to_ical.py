@@ -3,7 +3,7 @@ from datetime import datetime
 from icalendar import Calendar, Event
 
 
-def convert_transformed_timetable_to_ical(transformed_timetable):
+def _convert_transformed_timetable_to_ical(transformed_timetable):
 
     cal = Calendar()
 

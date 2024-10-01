@@ -1,7 +1,7 @@
 from playwright.sync_api import Page
 
 
-def set_active_school_in_weduc(page: Page, student_config):
+def _set_active_school_in_weduc(page: Page, student_config):
 
     school_id, school_name = (
         student_config["school_id"],

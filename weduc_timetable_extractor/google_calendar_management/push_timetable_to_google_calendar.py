@@ -1,10 +1,10 @@
 from googleapiclient.errors import HttpError
 
-from .convert_transformed_timetable_to_google_calendar_events import (
-    convert_transformed_timetable_to_google_calendar_events,
+from ._convert_transformed_timetable_to_google_calendar_events import (
+    _convert_transformed_timetable_to_google_calendar_events,
 )
-from .get_google_calendar_id import get_google_calendar_id
-from .get_google_calendar_service import get_google_calendar_service
+from ._get_google_calendar_id import _get_google_calendar_id
+from ._get_google_calendar_service import _get_google_calendar_service
 
 
 def push_timetable_to_google_calendar(student_config):
@@ -16,7 +16,7 @@ def push_timetable_to_google_calendar(student_config):
         student_config["calendar_to_update"],
     )
 
-    google_calendar_events = convert_transformed_timetable_to_google_calendar_events(
+    google_calendar_events = _convert_transformed_timetable_to_google_calendar_events(
         timetable
     )
 
@@ -26,10 +26,10 @@ def push_timetable_to_google_calendar(student_config):
 U: signifies an updated event"""
     )
 
-    service = get_google_calendar_service()
+    service = _get_google_calendar_service()
 
     try:
-        calendar_id = get_google_calendar_id(service, calendar_name)
+        calendar_id = _get_google_calendar_id(service, calendar_name)
 
         for event in google_calendar_events:
             event_id = event["id"]

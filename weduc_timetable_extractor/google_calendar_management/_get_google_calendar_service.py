@@ -10,7 +10,7 @@ from googleapiclient.discovery import build
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
 
 
-def get_google_calendar_service():
+def _get_google_calendar_service():
     creds = get_credentials()
 
     service = build("calendar", "v3", credentials=creds)

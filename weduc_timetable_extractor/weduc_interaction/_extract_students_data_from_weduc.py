@@ -1,7 +1,7 @@
 from playwright.sync_api import Page
 
 
-def extract_students_data_from_weduc(page: Page):
+def _extract_students_data_from_weduc(page: Page):
 
     print("Extracting student ID info from Weduc ...")
 

@@ -3,7 +3,7 @@ import json
 from freezegun import freeze_time
 
 from weduc_timetable_extractor.google_calendar_management import (
-    convert_transformed_timetable_to_google_calendar_events,
+    _convert_transformed_timetable_to_google_calendar_events,
 )
 
 test_timetable = list(
@@ -99,6 +99,6 @@ test_timetable = list(
 @freeze_time("2024-09-15")
 def test_convert_transformed_timetable_to_google_calendar_events(snapshot):
 
-    result = convert_transformed_timetable_to_google_calendar_events(test_timetable)
+    result = _convert_transformed_timetable_to_google_calendar_events(test_timetable)
 
     assert snapshot == result

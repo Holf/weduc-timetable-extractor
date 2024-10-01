@@ -1,1 +1,1 @@
-from .get_command_line_args import get_command_line_args
+from ._get_command_line_args import _get_command_line_args
