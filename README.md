@@ -79,7 +79,7 @@ There are two modes of operation:
 
 API mode requires you to have set up access to the Google Calendar API.
 
-_Setting up Google Calendar API access is a little more involved, which is why the `iCalendar` mode is also provided for importing events to Google Calendar via an`.ics` file upload, instead._
+> _Setting up Google Calendar API access is a little more involved, which is why the `iCalendar` mode is also provided for importing events to Google Calendar via an`.ics` file upload, instead._
 
 To do this, complete the three tasks described [here](https://developers.google.com/calendar/api/quickstart/python#set-up-environment). You only need to complete the tasks in the _'Set up your environment'_ section.
 
