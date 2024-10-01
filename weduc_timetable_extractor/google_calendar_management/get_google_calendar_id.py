@@ -20,5 +20,4 @@ def get_google_calendar_id(service, calendar_name):
 
     except HttpError as error:
         print(f"An error occurred: {error}")
-        sys.stderr.write("\nUnable to get Google Calendar Id\n")
-        sys.exit(2)
+        sys.exit("\nUnable to get Google Calendar Id\n")
