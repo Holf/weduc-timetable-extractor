@@ -2,22 +2,24 @@
 username = your_weduc_username
 password = your_weduc_password
 
-# The next entry is optional. The default Ubuntu Linux Chromium path will be used
-# if this is not specified.
-chromium_path = path to where Playwright should look for Chromium browser
+; The next entry is optional. The default path for the current OS will be used
+; if this is not specified.
+; Note: Chrome Browser for Windows / MacOS. Chromium Browser for Ubuntu Linux.
+; These are typically the versions that users of these OSes install.
+chromium_path = path to where Playwright should look for Browser
 
 [ical]
-# The next entry is only needed if running in `ical` mode.
+; The next entry is only needed if running in `ical` mode.
 output_folder_path = the folder where iCalendar files should be written out to
 
 [student_1]
 school_id = the Weduc ID of the school to which the student belongs
 student_id = the Weduc ID of the student
-# The next entry is only needed if running in 'api' mode.
+; The next entry is only needed if running in 'api' mode.
 calendar_to_update = the name of the calendar, in Google, to which Weduc events should be pushed
 
-# [student_2]
-# ... as above, but for another student
+; [student_2]
+; ... as above, but for another student
 
-# [student_3]
-# ... etc
+; [student_3]
+; ... etc
