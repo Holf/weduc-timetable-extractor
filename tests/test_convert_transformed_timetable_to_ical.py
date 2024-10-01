@@ -1,6 +1,6 @@
 from freezegun import freeze_time
 
-from weduc_timetable_extractor.icalendar_management import (
+from weduc_timetable_extractor.icalendar_management._convert_transformed_timetable_to_ical import (
     _convert_transformed_timetable_to_ical,
 )
 
@@ -95,7 +95,7 @@ test_timetable = list(
 
 
 @freeze_time("2024-09-15")
-def test_convert_json_to_ical(snapshot):
+def test_convert_transformed_timetable_to_ical(snapshot):
 
     result = _convert_transformed_timetable_to_ical(test_timetable)
 

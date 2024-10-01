@@ -1,5 +1,5 @@
 # serializer version: 1
-# name: test_convert_json_to_ical
+# name: test_convert_transformed_timetable_to_ical
   '''
   BEGIN:VCALENDAR
   BEGIN:VEVENT
