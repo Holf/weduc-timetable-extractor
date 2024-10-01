@@ -30,6 +30,7 @@ def get_credentials():
 
     token_file_path = project_root / "token.json"
     credentials_file_path = project_root / "credentials.json"
+    validate_credentials_path(credentials_file_path)
 
     # Check if token.json exists, which stores the user's access and refresh tokens.
     if os.path.exists(token_file_path):
@@ -47,3 +48,11 @@ def get_credentials():
         with open(token_file_path, "w") as token:
             token.write(creds.to_json())
     return creds
+
+
+def validate_credentials_path(credentials_file_path):
+    if not credentials_file_path.is_file():
+        sys.exit(
+            f"""Error: there is no Google Calendar API 'credentials.json' file present in the same folder as the executable.
+See the project documentation for info on setting this up: https://github.com/Holf/weduc-timetable-extractor/blob/main/README.md"""
+        )

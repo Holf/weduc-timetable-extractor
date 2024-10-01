@@ -21,6 +21,7 @@ def get_config():
             project_root = Path(__file__).resolve().parent.parent
 
         config_file_path = project_root / "config.ini"
+        validate_config_ini_path(config_file_path)
 
         config = configparser.ConfigParser()
         config.read(config_file_path)
@@ -67,6 +68,18 @@ def get_chromium_path():
     }
 
     return os_map.get(platform.system())
+
+
+def validate_config_ini_path(config_ini_file_path):
+    if not config_ini_file_path.is_file():
+        sys.exit(
+            f"Error: unable to find a config.ini file at path '{config_ini_file_path}'"
+        )
+
+
+def validate_chromium_path(chromium_path):
+    if not Path(chromium_path).is_file():
+        sys.exit(f"Error: unable to find a browser at path '{chromium_path}'")
 
 
 def get_student_configs():

@@ -1,3 +1,5 @@
+import sys
+
 from playwright.sync_api import sync_playwright
 
 from weduc_timetable_extractor import get_command_line_args
@@ -5,6 +7,7 @@ from weduc_timetable_extractor.config_management import (
     get_chromium_path,
     get_student_configs,
     get_weduc_credentials,
+    validate_chromium_path,
 )
 from weduc_timetable_extractor.google_calendar_management import (
     push_timetable_to_google_calendar,
@@ -20,14 +23,24 @@ from weduc_timetable_extractor.weduc_interaction import (
 )
 
 
+def validate_at_least_one_student_config(student_configs):
+    count = len(student_configs)
+
+    if count > 0:
+        return count
+
+    sys.exit("Error: there are no student configs in config.ini")
+
+
 def main():
     args = get_command_line_args()
     weduc_credentials = get_weduc_credentials()
     use_headless = weduc_credentials["credentials_present"]
 
     student_configs = get_student_configs()
+    count = validate_at_least_one_student_config(student_configs)
 
-    print(f"Found {len(student_configs)} student config(s)")
+    print(f"Found {count} student config(s)")
 
     with sync_playwright() as p:
         print(
@@ -39,14 +52,15 @@ def main():
         print("Launching browser ...")
 
         chromium_path = get_chromium_path()
-        print("path", chromium_path)
+        validate_chromium_path(chromium_path)
+        print("Using browser located at:", chromium_path)
+
         browser = p.chromium.launch(
             executable_path=chromium_path, headless=use_headless
         )
         page = browser.new_page()
 
         page.goto("https://app.weduc.co.uk/")
-
         login_to_weduc(page, weduc_credentials)
 
         schools = extract_schools_data_from_weduc(page)
