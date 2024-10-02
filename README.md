@@ -1,12 +1,174 @@
 # weduc-timetable-extractor
 
-A utility that extracts the lesson timetable from [Weduc](https://www.reachmoreparents.com/) and pushes the events within to Google Calendar.
+A utility that extracts lesson timetables from [Weduc](https://www.reachmoreparents.com/) and pushes the events within to iCalendar files or Google Calendars.
 
-There is also an option to output iCalendar files, instead.
+## Modes
+
+**weduc-timetable-extractor** has two modes. In both cases it will log on to Weduc, extract the timetable data for one or more students, and then:
+
+### `ical` mode
+
+In `ical` mode the extracted timetable data will be written out to `.ics` files in **iCalender** format, one file per student.
+
+```sh
+> weduc-timetable-extractor.exe ical
+```
+
+### `api` mode
+
+In `api` mode, the extracted timetable data will be written directly to Google Calendars; a different calendar can be specified per student.
+
+```sh
+> weduc-timetable-extractor.exe api
+```
 
 ## Setup
 
-> **weduc-timetable-extractor** has been tested on Ubuntu running on Windows Subsystem for Linux 2 (WSL2). It _should_ work on other version of Linux, too, or even MacOS and Windows ... but this hasn't been tested.
+Setting up **weduc-timetable-extractor** requires you to follow these steps:
+
+### Download the latest release
+
+This is available [here](https://github.com/Holf/weduc-timetable-extractor/releases/latest).
+
+There are versions available for:
+
+- Windows
+- MacOS
+- Ubuntu 20.04
+- Ubuntu 22.04
+
+Download the executable suitable for your OS.
+
+### Install Google Chrome browser
+
+**weduc-timetable-extractor** relies on the Playwright end-to-end testing framework to drive a Chrome browser instance that interacts with the Weduc site.
+
+You can install Chrome for your OS by following the instructions [here](https://www.google.com/intl/en_uk/chrome/).
+
+> <br>**weduc-timetable-extractor** will look for the Chrome browser instance in the default install location for the OS it is running on:
+>
+> | OS      | Path                                                           |
+> | ------- | -------------------------------------------------------------- |
+> | Windows | `C:\Program Files (x86)\Google\Chrome\Application\chrome.exe`  |
+> | MacOS   | `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome` |
+> | Ubuntu  | `/usr/bin/google-chrome`                                       |
+>
+> If you wish to use a Chrome executable installed to a non-default location, you can specify the path in the `config.ini` file (see below for more info).
+> <br><br>
+
+### Create `config.ini`
+
+This can be done by:
+
+- downloading [`config.ini.template`](https://github.com/Holf/weduc-timetable-extractor/blob/main/config.ini.template)
+- renaming it to `config.ini`
+- populating it as described in the inline comments.
+
+The `config.ini` file should be placed in the same folder as the **weduc-timetable-extractor** executable you should have already downloaded.
+
+#### Example config
+
+An example `config.ini` might be:
+
+```ini
+[weduc]
+username = john_smith
+password = password123
+
+[ical]
+output_folder_path = ./student_calendars ; only needed for ical mode
+
+[student_1]
+school_name = Grange Hill Primary School
+student_name = Tucker Jenkins
+calendar_to_update = Tucker - School Timetable ; only needed for api mode
+
+[student_2]
+school_name = Grange Hill Secondary School
+student_name = Zammo Maguire
+calendar_to_update = Zammo - School Timetable ; only needed for api mode
+```
+
+Further detail on each entry:
+
+#### `weduc`
+
+| Entry         | Purpose                                                                                     |
+| ------------- | ------------------------------------------------------------------------------------------- |
+| `username`    | The Username you use for logging in to Weduc.<br>_Optional_.                                |
+| `password`    | The Password you use for logging in to Weduc.<br> _Optional_.                               |
+| `chrome_path` | The path to the Chrome executable that will be used to interact with Weduc.<br> _Optional_. |
+
+If both `username` and `password` values are provided, the browser instance used to extract data from Weduc will run headlessly, as no user input is required.
+
+Should either `username` or `password` be missing, the browser instance used to extract data from Weduc will run interactively; the script will pause on the login screen so you can enter Username and Password manually.
+
+if `chrome_path` is not specified then **weduc-timetable-extractor** will look for Chrome in the default install path.
+
+> <br>If you have forked this Repo for your own development, **_be wary of accidentally committing a `password`_** that might be present in `config.ini`.
+>
+> An entry in the `.gitingore` file should prevent this but it bears repeating.
+> <br><br>
+
+#### `ical`
+
+| Entry                | Purpose                                                                                                      |
+| -------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `output_folder_path` | The path to the folder where iCalendar files should be written.<br> _Required_ if running in iCalendar mode. |
+
+#### `student_` sections
+
+There should be one or more of these sections present. Each section name must begin with `student_` but is otherwise permissive. `student_1`, `student_A` or `student_Bill` are all allowed, for example.
+
+| Entry                | Purpose                                                                                                                 |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `school_name`        | The name of the School that the student goes to, precisely as it appears in Weduc.<br> _Required._                      |
+| `student_name`       | The student's name, precisely as it appears in Weduc.<br> _Required._                                                   |
+| `calendar_to_update` | The name of the Google Calendar to which Weduc timetable events will be pushed. <br> _Required_ if running in API mode. |
+
+### Set up Google Calendar API
+
+> <br>This is only necessary if you plan to use **API mode**.
+>
+> Setting up Google Calendar API is quite involved, so you may prefer to use **iCal mode** and import iCalendar files to Google Calendar manually.
+>
+> You would also want to use **iCal mode** if you plan to import Weduc timetable events into calendars other than Google Calendar.
+> <br><br>
+
+To set up Google Calendar API, complete the three tasks described [here](https://developers.google.com/calendar/api/quickstart/python#set-up-environment). You only need to complete the tasks in the _'Set up your environment'_ section.
+
+Having gone through this process, you should be prompted to download some client credentials. This will be a JSON file with a name along the lines of:
+
+`client_secret_XXXXX.apps.googleusercontent.com.json`
+
+**weduc-timetable-extractor** expects to find this, but it looks for a file named `credentials.json`.
+
+Make sure the file you have downloaded is renamed as such, and is placed in the same folder as the downloaded `weduc-timetable-extractor` executable, alongside `config.ini`.
+
+## Running **weduc-timetable-extractor**
+
+Having carried out the setup steps above, you should have these files in the same folder:
+
+```ini
+timetable-extractor/
+  |─ weduc-timetable-extractor.exe
+  |─ config.ini
+  |─ credentials.json # only needed for API mode
+```
+
+You can then run **weduc-timetable-extractor** by doing either:
+
+```sh
+> weduc-timetable-extractor.exe ical
+```
+
+```sh
+> weduc-timetable-extractor.exe api
+```
+
+... depending on which mode you are using.
+
+## Development environment setup
 
 The following setup steps should be carried out:
 
@@ -31,110 +193,21 @@ pipenv shell
 pipenv install
 ```
 
-### Install Chromium browser
-
-**weduc-timetable-extractor** relies on the Playwright end-to-end testing framework to drive a Chromium browser instance that interacts with the Weduc site.
-
-Chromium must, therefore, be installed.
-
-On Ubuntu, this can be done with the command:
+There are some development scripts present in the included [`pipfile`](https://github.com/Holf/weduc-timetable-extractor/blob/main/Pipfile) which can be run by issuing, for example:
 
 ```sh
-sudo apt-get install chromium-browser
+pipenv run test
 ```
-
-> _**weduc-timetable-extractor** expects to find Chromium in the default location for Ubuntu Linux, this being `/usr/bin/google-chrome`._
->
-> _This path can be overridden using the `weduc.chromium_path` entry in `config.ini` (see below)._
-
-### Create `config.ini`
-
-This can be done by copying `config.ini.template` to `config.ini` and then populating it as described in the inline comments.
-
-See below for further detail on `config.ini`.
-
-## How it works
-
-**weduc-timetable-extractor** uses the Playwright end-to-end testing framework to drive a browser. The browser logs in to Weduc and then, using the resulting authenticated state, makes API calls to the Weduc endpoints that serve up timetable data (this data would usually be used by Weduc to render the student's timetable).
-
-The timetable data is then either:
-
-- pushed to Google Calendar via the Google Calendar API.
-- written out in iCalendar format to an `.ics` file, ready for you to import into a calendar system of your choice.
-
-### Multiple are students catered for
-
-**weduc-timetable-extractor** can extract more than one student timetable and push data to separate Google Calendars or iCalendar files. This is useful if you have more than one student in the family.
-
-## Modes
-
-There are two modes of operation:
-
-| Mode      | Functionality                                                                                 | Command                 | Notes                                                                                                                                                                                                  |
-| --------- | --------------------------------------------------------------------------------------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| API       | Extracts timetables from Weduc and then pushes the events within directly to Google Calender. | `pipenv run start-api`  | When running in API mode, the `student_` sections in the `config.ini` file must each have a `calendar_to_update` entry; this specifies which Google Calendar the timetable events should be pushed to. |
-| iCalender | Extracts timetables from Weduc and then writes the events within out to iCalendar files.      | `pipenv run start-ical` | When running in iCalendar mode, the `ical` section in the `config.ini` file must have an `output_folder_path` entry; this specifies where iCalendar files should be written to.                        |
-
-### Requirements for running in API mode
-
-API mode requires you to have set up access to the Google Calendar API.
-
-> _Setting up Google Calendar API access is a little more involved, which is why the `iCalendar` mode is also provided for importing events to Google Calendar via an`.ics` file upload, instead._
-
-To do this, complete the three tasks described [here](https://developers.google.com/calendar/api/quickstart/python#set-up-environment). You only need to complete the tasks in the _'Set up your environment'_ section.
-
-Having gone through this process, you should be able to download some client credentials. This will be a JSON file with a name along the lines of:
-
-`client_secret_XXXXX.apps.googleusercontent.com.json`
-
-... where the `XXXXX` is a long string.
-
-**weduc-timetable-extractor** expects to find this, but it looks for a file named `credentials.json`. So, make sure the file you have downloaded is renamed as such, and is placed in the project's root folder.
-
-## Configuration
-
-The utility relies on a `config.ini` file being present and populated with the correct values.
-Create `config.ini` by copying `config.ini.template` and filling in the values needed.
-
-The entries that `config.ini` should contain in each section are:
-
-### `weduc`
-
-| Entry      | Purpose                                       |
-| ---------- | --------------------------------------------- |
-| `username` | The Username you use for logging in to Weduc. |
-| `password` | The Password you use for logging in to Weduc. |
-
-If both these values are provided, the browser instance used to extract data from Weduc will run headlessly, as no user input is required.
-
-Should either value be missing, the browser instance used to extract data from Weduc will run interactively; the script will pause on the login screen so you can enter Username and Password manually.
-
-### `ical`
-
-| Entry                | Purpose                                                                                                             |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `output_folder_path` | The path to the folder where iCalendar files should be written.<br>This is _required_ if running in iCalendar mode. |
-
-### `student_` sections
-
-There should be one or more of these sections present. Each section name must begin with `student_` but is otherwise permissive. `student_1`, `student_A` or `student_Bill` are all allowed, for example.
-
-| Entry          | Purpose                                                                                           | Where to find                                                                                                                                 |
-| -------------- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| `school_name`  | The name of the School that the student goes to, precisely as it appears in Weduc.<br>_Required._ |                                                                                                                                               |
-| `student_name` | The Student's name, precisely as it appears in Weduc.<br>_Required._                              | Go to the 'Parents' section in Weduc and then select the Student for whom you wish to find the id.<br>The id will be present in the page URL. |
-
-**Be wary of accidentally committing security-sensitive credentials** that might be present in `config.ini`.
-
-_(The `.gitingore` file should prevent this but it is worth reiterating, nevertheless.)_
 
 ## Why was this written?
 
-Viewing a timetable in Weduc requires you to log on and then carry out a few navigation steps to get to the correct screen.
+Viewing a timetable in Weduc requires you to log on and then carry out a number of navigation steps to get to the correct screen.
 
 Viewing events in Google Calendar (or the calendaring system of your choice) is usually just a matter of getting your phone out of your pocket and opening the calendar app.
 
-I wrote this because it makes it quicker and easier to provide an answer when my kids say "Dad, what lessons do I have today?"
+Furthermore, those calendars can then be shared with your kids so they, too, have easy access to their timetable.
+
+_Yes, they should already have a timetable. And yes, it always seems to get lost within a week. Or it falls apart in their pockets._
 
 ### A chance to play with Python
 
