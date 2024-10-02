@@ -45,7 +45,7 @@ Download the executable suitable for your OS.
 
 You can install Chrome for your OS by following the instructions [here](https://www.google.com/intl/en_uk/chrome/).
 
-> <br>**weduc-timetable-extractor** will look for the Chrome browser instance in the default install location for the OS it is running on:
+> **weduc-timetable-extractor** will look for the Chrome browser instance in the default install location for the OS it is running on:
 >
 > | OS      | Path                                                           |
 > | ------- | -------------------------------------------------------------- |
@@ -54,7 +54,6 @@ You can install Chrome for your OS by following the instructions [here](https://
 > | Ubuntu  | `/usr/bin/google-chrome`                                       |
 >
 > If you wish to use a Chrome executable installed to a non-default location, you can specify the path in the `config.ini` file (see below for more info).
-> <br><br>
 
 ### Create `config.ini`
 
@@ -105,10 +104,9 @@ Should either `username` or `password` be missing, the browser instance used to 
 
 if `chrome_path` is not specified then **weduc-timetable-extractor** will look for Chrome in the default install path.
 
-> <br>If you have forked this Repo for your own development, **_be wary of accidentally committing a `password`_** that might be present in `config.ini`.
+> If you have forked this Repo for your own development, **_be wary of accidentally committing a `password`_** that might be present in `config.ini`.
 >
 > An entry in the `.gitingore` file should prevent this but it bears repeating.
-> <br><br>
 
 #### `ical`
 
@@ -122,18 +120,17 @@ There should be one or more of these sections present. Each section name must be
 
 | Entry                | Purpose                                                                                                                 |
 | -------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `school_name`        | The name of the School that the student goes to, precisely as it appears in Weduc.<br> _Required._                      |
+| `school_name`        | The name of the school that the student goes to, precisely as it appears in Weduc.<br> _Required._                      |
 | `student_name`       | The student's name, precisely as it appears in Weduc.<br> _Required._                                                   |
 | `calendar_to_update` | The name of the Google Calendar to which Weduc timetable events will be pushed. <br> _Required_ if running in API mode. |
 
 ### Set up Google Calendar API
 
-> <br>This is only necessary if you plan to use **API mode**.
+> This is only necessary if you plan to use **API mode**.
 >
 > Setting up Google Calendar API is quite involved, so you may prefer to use **iCal mode** and import iCalendar files to Google Calendar manually.
 >
 > You would also want to use **iCal mode** if you plan to import Weduc timetable events into calendars other than Google Calendar.
-> <br><br>
 
 To set up Google Calendar API, complete the three tasks described [here](https://developers.google.com/calendar/api/quickstart/python#set-up-environment). You only need to complete the tasks in the _'Set up your environment'_ section.
 
@@ -144,6 +141,20 @@ Having gone through this process, you should be prompted to download some client
 **weduc-timetable-extractor** expects to find this, but it looks for a file named `credentials.json`.
 
 Make sure the file you have downloaded is renamed as such, and is placed in the same folder as the downloaded `weduc-timetable-extractor` executable, alongside `config.ini`.
+
+> ### A note on auth. token expiry
+>
+> Unless you are prepared to go through an arduous verification process, you will have to leave the project created for Calendar API access in **test mode**. Unfortunately, this means the token issued when authenticating with Google has a short expiry, of seven days.
+>
+> This is fine if you are running **weduc-timetable-extractor** manually, as you can re-authenticate when prompted.
+>
+> It will, however, be a barrier if you want to automate timetable extraction.
+>
+> #### A workaround (for some)
+>
+> If you have a [Google Workspace](https://workspace.google.com/intl/en_uk/) set up, then you can create Calendar API projects that do not have to be in test mode.
+>
+> Thus, you can push events to a user's calendar within your organization and then share the calendar externally with any other Google Calendar user.
 
 ## Running **weduc-timetable-extractor**
 
