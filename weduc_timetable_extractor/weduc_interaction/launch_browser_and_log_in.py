@@ -1,6 +1,6 @@
 from weduc_timetable_extractor._config_management import (
-    get_chromium_path,
-    validate_chromium_path,
+    get_chrome_path,
+    validate_chrome_path,
 )
 
 from ._login_to_weduc import _login_to_weduc
@@ -9,11 +9,11 @@ from ._login_to_weduc import _login_to_weduc
 def launch_browser_and_log_in(weduc_credentials, use_headless, p):
     print("Launching browser ...")
 
-    chromium_path = get_chromium_path()
-    validate_chromium_path(chromium_path)
-    print("Using browser located at:", chromium_path)
+    chrome_path = get_chrome_path()
+    validate_chrome_path(chrome_path)
+    print("Using browser located at:", chrome_path)
 
-    browser = p.chromium.launch(executable_path=chromium_path, headless=use_headless)
+    browser = p.chromium.launch(executable_path=chrome_path, headless=use_headless)
     page = browser.new_page()
 
     page.goto("https://app.weduc.co.uk/")

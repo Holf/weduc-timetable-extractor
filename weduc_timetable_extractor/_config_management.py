@@ -63,11 +63,11 @@ def get_ics_folder_path(throw_if_absent=False):
     return get_config_option("ical", "output_folder_path", throw_if_absent)
 
 
-def get_chromium_path():
-    chromium_path = get_config_option(WEDUC_SECTION_NAME, "chromium_path")
+def get_chrome_path():
+    chrome_path = get_config_option(WEDUC_SECTION_NAME, "chrome_path")
 
-    if chromium_path != None:
-        return chromium_path
+    if chrome_path != None:
+        return chrome_path
 
     os_map = {
         "Windows": r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
@@ -85,9 +85,9 @@ def validate_config_ini_path(config_ini_file_path):
         )
 
 
-def validate_chromium_path(chromium_path):
-    if not Path(chromium_path).is_file():
-        sys.exit(f"Error: unable to find a browser at path '{chromium_path}'")
+def validate_chrome_path(chrome_path):
+    if not Path(chrome_path).is_file():
+        sys.exit(f"Error: unable to find a browser at path '{chrome_path}'")
 
 
 def get_student_configs():
