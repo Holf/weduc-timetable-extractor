@@ -13,7 +13,7 @@ def launch_browser_and_log_in(weduc_credentials, use_headless, p):
     validate_chrome_path(chrome_path)
     print("Using browser located at:", chrome_path)
 
-    browser = p.chromium.launch(executable_path=chrome_path, headless=use_headless)
+    browser = p.chromium.launch(executable_path=chrome_path, headless=use_headless, channel="chromium")
     page = browser.new_page()
 
     page.goto("https://app.weduc.co.uk/")
