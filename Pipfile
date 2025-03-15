@@ -17,8 +17,7 @@ syrupy = "*"
 pyinstaller = "*"
 
 [requires]
-python_version = "3.12"
-python_full_version = "3.12.6"
+python_version = "3.13"
 
 [scripts]
 start-api = "sh -c 'python -m weduc_timetable_extractor api'"
